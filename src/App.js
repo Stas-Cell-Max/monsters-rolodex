@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import logo from './logo.svg';
+import CardList from './components/card-list/card-list.component'
 
 import './App.css';
 
@@ -20,41 +21,43 @@ class App extends Component {
           () => {
             return { members: users };
           },
-          () => {
-            console.log(this.state);
-          }
+          
         )
       );
   }
+  onSearchChange = (event) => {
+    const searchField = event.target.value.toLocaleLowerCase();
+    this.setState(() => {
+        return {searchField };
+      });
+    } 
 
   render() {
 
-    const filteredMembers = this.state.members.filter((member)=>{
-      return member.name.toLocaleLowerCase().includes(this.state.searchField);
+    const { members, searchField,} = this.state;
+    const {onSearchChange} = this;
+    const filteredMembers = members.filter((member)=>{
+      return member.name.toLocaleLowerCase().includes(searchField);
      });
     return (
       <div className="App">
         <input className='search-box' 
         type='search' 
         placeholder='search members' 
-        onChange={(event) => {
-
-        const searchField = event.target.value.toLocaleLowerCase();
+        onChange={onSearchChange}
         
-        this.setState(() => {
-            return {searchField };
-          } 
-        );
-
-        }} 
+        
+        
         />
-        {filteredMembers.map((member) => {
+          { /*filteredMembers.map((member) => {
           return (
             <div key={member.id}>
               <h1>{member.name}</h1>
             </div>
           );
-        })}
+        })
+        */}
+        <CardList members={filteredMembers} />
       </div>
     );
   }
