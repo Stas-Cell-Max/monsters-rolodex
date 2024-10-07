@@ -8,6 +8,7 @@ class App extends Component {
     super();
     this.state = {
       members: [],
+      searchField: '', // searchField to track user input
     };
   }
 
@@ -27,22 +28,27 @@ class App extends Component {
   }
 
   render() {
+
+    const filteredMembers = this.state.members.filter((member)=>{
+      return member.name.toLocaleLowerCase().includes(this.state.searchField);
+     });
     return (
       <div className="App">
-        <input className='search-box' type='search' placeholder='search members' onChange={(event) => {
-          const searchString = event.target.value.toLocaleLowerCase();
-          const filteredMembers = this.state.members.filter((member)=>{
-           return member.name.toLocaleLowerCase().includes(searchString);
-          });
-          
-          this.setState(() => {
-            return {members:filteredMembers};
+        <input className='search-box' 
+        type='search' 
+        placeholder='search members' 
+        onChange={(event) => {
+
+        const searchField = event.target.value.toLocaleLowerCase();
+        
+        this.setState(() => {
+            return {searchField };
           } 
         );
 
         }} 
         />
-        {this.state.members.map((member) => {
+        {filteredMembers.map((member) => {
           return (
             <div key={member.id}>
               <h1>{member.name}</h1>
